@@ -1,0 +1,48 @@
+{
+  "private": true,
+  "name": "homepage",
+  "description": "Crypton - private, end-to-end encrypted markdown pad for Identity Box",
+  "version": "0.1.0-alpha.0",
+  "author": "Marcin Czenko <marcin@everydayproductive.com>",
+  "engines": {
+    "node": ">=12.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/identity-box/crypton.git"
+  },
+  "dependencies": {
+    "@confluenza/gatsby-theme-confluenza": "^1.0.22",
+    "@emotion/core": "^10.0.28",
+    "@emotion/styled": "^10.0.27",
+    "gatsby": "^2.20.2",
+    "gatsby-plugin-catch-links": "^2.2.0",
+    "gatsby-plugin-emotion": "^4.2.0",
+    "markdown-it": "^11.0.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-helmet": "^5.2.1",
+    "react-markdown-editor-lite": "^1.1.4",
+    "react-media": "^1.9.2"
+  },
+  "keywords": [
+    "gatsby",
+    "confluenza",
+    "markdown"
+  ],
+  "license": "MIT",
+  "main": "n/a",
+  "scripts": {
+    "build": "gatsby build",
+    "now-build": "yarn build",
+    "develop": "gatsby develop",
+    "format": "prettier --trailing-comma es5 --no-semi --single-quote --write \"src/**/*.js\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.2.0",
+    "eslint-config-react-app": "^5.2.1",
+    "gatsby-cli": "^2.11.0",
+    "gatsby-plugin-root-import": "^2.0.5"
+  }
+}
