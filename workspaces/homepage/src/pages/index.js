@@ -1,21 +1,33 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { graphql, navigate } from 'gatsby'
 
 // import { PrivateRoute } from 'src/components/private-route'
 import { Crypton } from 'src/components/crypton'
 
-const isAuthenticated = state => {
-  return (state && state.authenticated)
+const isAuthenticated = () => {
+  const isSSR = typeof window === 'undefined'
+  if (!isSSR) {
+    return localStorage.getItem('authenticated') === 'true'
+  }
+  return false
 }
 
 const Home = ({ data, location }) => {
+  const [authenticated, setAuthenticated] = useState(false)
   console.log('************* Welcome to CRYPTON *************')
 
   useEffect(() => {
-    if (!isAuthenticated(location.state)) {
+    if (!isAuthenticated()) {
+      setAuthenticated(false)
       navigate('/login')
+    } else {
+      setAuthenticated(true)
     }
-  }, [location.state])
+  }, [])
+
+  if (!authenticated) {
+    return null
+  }
 
   return (
     <Crypton data={data} />

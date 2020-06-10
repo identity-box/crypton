@@ -54,6 +54,13 @@ const Wrapper = styled.div({
   // opacity: '0.84'
 })
 
+const logout = () => {
+  const isSSR = typeof window === 'undefined'
+  if (!isSSR) {
+    return localStorage.setItem('authenticated', false)
+  }
+}
+
 const Header = () => (
   <HyperWrapper>
     <Wrapper>
@@ -67,7 +74,7 @@ const Header = () => (
         <MenuLink
           css={{
             margin: '5px 20px'
-          }} to='/' state={{ authenticated: false }}
+          }} onClick={logout} to='/login'
         >Logout
         </MenuLink>
         {/* <MenuLink
