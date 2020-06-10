@@ -1,92 +1,31 @@
-import React, { useState, useEffect, useCallback, useRef, Suspense } from 'react'
-import { graphql } from 'gatsby'
-import Helmet from 'react-helmet'
+import React, { useEffect } from 'react'
+import { graphql, navigate } from 'gatsby'
 
-import { Header } from 'src/components/header'
+// import { PrivateRoute } from 'src/components/private-route'
+import { Crypton } from 'src/components/crypton'
 
-import { BodyFrame } from 'src/components/ui-blocks'
-import { Footer } from 'src/content'
-
-// import style manually
-import 'react-markdown-editor-lite/lib/index.css'
-
-import MarkdownIt from 'markdown-it'
-const MdEditor = React.lazy(() => import('react-markdown-editor-lite'))
-
-const useUnusualReloader = (location, onReady) => {
-  const [ready, setReady] = useState(false)
-
-  useEffect(() => {
-    setReady(true)
-    onReady && onReady()
-  }, [onReady])
-
-  return ready
+const isAuthenticated = state => {
+  return (state && state.authenticated)
 }
 
 const Home = ({ data, location }) => {
-  const mdParser = useRef(undefined)
   console.log('************* Welcome to CRYPTON *************')
-  // see: https://www.gatsbyjs.org/docs/using-client-side-only-packages/#workaround-3-load-client-side-dependent-components-with-loadable-components
-  const isSSR = typeof window === 'undefined'
-
-  const onReady = useCallback(() => {
-    setTimeout(() => {
-      setVisibility('visible')
-    }, 100)
-  }, [])
 
   useEffect(() => {
-    mdParser.current = new MarkdownIt(/* Markdown-it options */)
-  }, [])
-
-  const handleEditorChange = useCallback(({ html, text }) => {
-    // console.log('handleEditorChange', html, text)
-  }, [])
-
-  const pageReady = useUnusualReloader(location, onReady)
-
-  const [visibility, setVisibility] = useState('hidden')
-
-  if (!pageReady) {
-    return null
-  }
+    if (!isAuthenticated(location.state)) {
+      navigate('/login')
+    }
+  }, [location.state])
 
   return (
-    <>
-      <Helmet title='Crypton'>
-        <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0' />
-        <link href='https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap' rel='stylesheet' />
-      </Helmet>
-      <Header />
-      <BodyFrame css={{ visibility }}>
-        <div css={{
-          width: '100vw',
-          backgroundColor: 'white',
-          position: 'relative',
-          display: 'flex',
-          flexFlow: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          opacity: 0.85
-        }}
-        >
-          <h1>Welcome to Crypton!!!</h1>
-          <p>Private, end-to-end encrypted markdown pad for Identity Box</p>
-        </div>
-        {!isSSR &&
-          <Suspense fallback={<div />}>
-            <MdEditor
-              value=''
-              style={{ height: '500px', width: '100%' }}
-              renderHTML={(text) => mdParser.current.render(text)}
-              onChange={handleEditorChange}
-            />
-          </Suspense>}
-        <Footer data={data} />
-      </BodyFrame>
-    </>
+    <Crypton data={data} />
   )
+
+  // <Router>
+  //   <PrivateRoute path='/' component={Crypton} />
+  //   <PrivateRoute path='/app/profile' component={Profile} />
+  //   <Login path='/app/login' />
+  // </Router>
 }
 
 export const query = graphql`

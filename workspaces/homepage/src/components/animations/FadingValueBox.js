@@ -6,7 +6,7 @@ const FadingValueWrapper = styled.div(props => {
   const style = {
     display: 'flex',
     flexFlow: 'column nowrap',
-    alignItems: 'flex-start',
+    alignItems: props.alignItems || 'flex-start',
     justifyContent: 'center',
     width: '100%'
   }
@@ -24,7 +24,7 @@ const FadingValueWrapper = styled.div(props => {
   }
 })
 
-const FadingValueBox = ({ trigger, children, duration = 1 }) => (
+const FadingValueBox = ({ trigger, children, duration = 1, alignItems }) => (
   <AnimationBox
     startValue={0}
     stopValue={1}
@@ -32,7 +32,7 @@ const FadingValueBox = ({ trigger, children, duration = 1 }) => (
   >
     {
       opacity =>
-        <FadingValueWrapper duration={duration} opacity={opacity}>
+        <FadingValueWrapper duration={duration} opacity={opacity} alignItems={alignItems}>
           {children}
         </FadingValueWrapper>
     }
