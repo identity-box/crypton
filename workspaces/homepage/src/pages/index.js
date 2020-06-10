@@ -27,6 +27,8 @@ const useUnusualReloader = (location, onReady) => {
 const Home = ({ data, location }) => {
   const mdParser = useRef(undefined)
   console.log('************* Welcome to CRYPTON *************')
+  // see: https://www.gatsbyjs.org/docs/using-client-side-only-packages/#workaround-3-load-client-side-dependent-components-with-loadable-components
+  const isSSR = typeof window === 'undefined'
 
   const onReady = useCallback(() => {
     setTimeout(() => {
@@ -72,14 +74,15 @@ const Home = ({ data, location }) => {
           <h1>Welcome to Crypton!!!</h1>
           <p>Private, end-to-end encrypted markdown pad for Identity Box</p>
         </div>
-        <Suspense fallback={<div>Loading...</div>}>
-          <MdEditor
-            value=''
-            style={{ height: '500px', width: '100%' }}
-            renderHTML={(text) => mdParser.current.render(text)}
-            onChange={handleEditorChange}
-          />
-        </Suspense>
+        {!isSSR &&
+          <Suspense fallback={<div />}>
+            <MdEditor
+              value=''
+              style={{ height: '500px', width: '100%' }}
+              renderHTML={(text) => mdParser.current.render(text)}
+              onChange={handleEditorChange}
+            />
+          </Suspense>}
         <Footer data={data} />
       </BodyFrame>
     </>
